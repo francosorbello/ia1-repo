@@ -161,8 +161,7 @@ class AgenteRandom:
             2: "down",
             3: "left",
             4: "right",
-            5: "suck",
-            6: "stand",
+            5: "stand",
         }
 
     def up(self):
@@ -186,10 +185,8 @@ class AgenteRandom:
         self.env.accept_action(self.env.agentX,self.env.agentY)
 
     def suck(self):
-        if(self.sucio):
-            self.env.clean()
-            print("Clean.")
-        print("Try to clean.")
+        self.env.clean()
+        print("Clean.")
 
 
     def perspective(self):
@@ -201,7 +198,10 @@ class AgenteRandom:
         while(self.env.acciones>0):
             self.perspective()
             self.env.print_enviroment()
-            nroAccion = random.randint(1,6)
+            if(self.sucio):
+                self.suck()
+                continue
+            nroAccion = random.randint(1,5)
             nombreAccion = self.acciones.get(nroAccion)
             accion = getattr(self,nombreAccion)
             accion()
