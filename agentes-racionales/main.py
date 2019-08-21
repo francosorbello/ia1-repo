@@ -1,7 +1,7 @@
 from agentes import *
 import random
             
-env = Enviroment(4,4,30)
+env = Enviroment(64,64,80)
 agente1 = Agente(env)
 env.world_builder()
 print("#--Referencias--#")

@@ -57,7 +57,9 @@ class Enviroment:
         total_casillas = self.sizeX * self.sizeY
         cant_sucias = (self.dirt_rate * total_casillas)/100
         cant_sucias = self.redondeo(cant_sucias)
-        print("El agente limpió",self.rendimiento,"cuadros de",cant_sucias)
+        print("El agente limpió",self.rendimiento,"cuadros de los",cant_sucias,"cuadros sucios.")
+        ptje_limpio = self.rendimiento * 100 / cant_sucias
+        print("Eso es aproximadamente un",round(ptje_limpio,2),"% de la suciedad total.")
     
     def set_perfomance(self):
         self.rendimiento += 1
