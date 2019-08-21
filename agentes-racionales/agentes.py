@@ -27,7 +27,9 @@ class Enviroment:
         self.set_perfomance()
             
     def mover(self,posX,posY):
-        if(posX <= self.sizeX and posY <= self.sizeY):
+        print("x:",posX)
+        print("y:",posY)
+        if (posX >= 0 and posX < self.sizeX) and (posY>=0 and posY < self.sizeY):
             self.agentX = posX
             self.agentY = posY
             return True
@@ -96,21 +98,28 @@ class Agente:
 
     def up(self):
         self.env.accept_action(self.env.agentX-1,self.env.agentY)
+        print("Move up.")
 
     def down(self):
         self.env.accept_action(self.env.agentX+1,self.env.agentY)
+        print("Move down.")
 
     def left(self):
         self.env.accept_action(self.env.agentX,self.env.agentY-1)
-
+        print("Move left.")
+    
     def right(self):
         self.env.accept_action(self.env.agentX,self.env.agentY+1)
-
+        print("Move right.")
+    
     def stand(self):
+        print("Stand.")
         self.env.accept_action(self.env.agentX,self.env.agentY)
 
     def suck(self):
         self.env.clean()
+        print("Clean.")
+
 
     def perspective(self):
         self.posX = self.env.agentX
@@ -122,25 +131,77 @@ class Agente:
             self.perspective()
             self.env.print_enviroment()
             if(self.sucio):
-                print("Clean.")
                 self.suck()
             else:
                 # si estoy en la ultima posicion, subo
                 if (self.posX == (self.sizeX-1)) and (self.posY == (self.sizeY-1)):
-                    print("Move up.")
                     self.up()
                     continue
                 if ((self.posX-1) % 2 == 0):
                     if(self.posY == (self.sizeY-1)):
-                        print("Move down.")
                         self.down()
                     else:
-                        print("Move right.")
                         self.right()    
                 else:
                     if(self.posY == 0 and self.posX != (self.sizeX-1)):
-                        print("Move down.")
                         self.down()
                     else:
-                        print("Move left.")
                         self.left()
+
+class AgenteRandom:
+    def __init__(self,env):
+        self.env = env
+        self.posX = env.agentX
+        self.posY = env.agentY
+        self.sizeX = env.sizeX
+        self.sizeY = env.sizeY
+        self.sucio = False;
+        self.acciones = {
+            1: "up",
+            2: "down",
+            3: "left",
+            4: "right",
+            5: "suck",
+            6: "stand",
+        }
+
+    def up(self):
+        self.env.accept_action(self.env.agentX-1,self.env.agentY)
+        print("Move up.")
+
+    def down(self):
+        self.env.accept_action(self.env.agentX+1,self.env.agentY)
+        print("Move down.")
+
+    def left(self):
+        self.env.accept_action(self.env.agentX,self.env.agentY-1)
+        print("Move left.")
+    
+    def right(self):
+        self.env.accept_action(self.env.agentX,self.env.agentY+1)
+        print("Move right.")
+    
+    def stand(self):
+        print("Stand.")
+        self.env.accept_action(self.env.agentX,self.env.agentY)
+
+    def suck(self):
+        if(self.sucio):
+            self.env.clean()
+            print("Clean.")
+        print("Try to clean.")
+
+
+    def perspective(self):
+        self.posX = self.env.agentX
+        self.posY = self.env.agentY
+        self.sucio = self.env.is_dirty()
+    
+    def think(self):
+        while(self.env.acciones>0):
+            self.perspective()
+            self.env.print_enviroment()
+            nroAccion = random.randint(1,6)
+            nombreAccion = self.acciones.get(nroAccion)
+            accion = getattr(self,nombreAccion)
+            accion()

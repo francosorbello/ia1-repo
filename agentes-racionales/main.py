@@ -2,7 +2,8 @@ from agentes import *
 import random
             
 env = Enviroment(64,64,80)
-agente1 = Agente(env)
+# agente1 = Agente(env)
+agente1 = AgenteRandom(env)
 env.world_builder()
 print("#--Referencias--#")
 print("*: posición del agente.")
