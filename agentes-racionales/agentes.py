@@ -27,8 +27,6 @@ class Enviroment:
         self.set_perfomance()
             
     def mover(self,posX,posY):
-        print("x:",posX)
-        print("y:",posY)
         if (posX >= 0 and posX < self.sizeX) and (posY>=0 and posY < self.sizeY):
             self.agentX = posX
             self.agentY = posY
@@ -197,7 +195,7 @@ class AgenteRandom:
     def think(self):
         while(self.env.acciones>0):
             self.perspective()
-            self.env.print_enviroment()
+            # self.env.print_enviroment()
             if(self.sucio):
                 self.suck()
                 continue

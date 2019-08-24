@@ -1,0 +1,4 @@
+2.10)
+A) No, ya que siempre se mantiene en movimiento. Esto hace que pierda puntos constantemente.
+B) En caso de uno con estados si podria ser racional, ya que al guardar estados anteriores puedo saber por cuales cuadros ya pasé.
+C) Si el agente supiese cada cuadro sucio entonces seria racional si usara esa informacion para limpiar los cuadros necesarios y luego quedarse quieto.
