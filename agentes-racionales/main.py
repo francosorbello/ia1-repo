@@ -11,6 +11,7 @@ elif aux == "2":
     agente1 = AgenteRandom(env)
 else:
     agente1 = AgenteEstado(env)
+
 env.world_builder()
 print("#--Referencias--#")
 print("*: posición del agente.")

@@ -8,7 +8,7 @@ class Enviroment:
         self.agentY = random.randint(0,sizeY-1)
         self.dirt_rate = dirt_rate 
         self.world = [[0]*sizeX for i in range(sizeY)]
-        self.acciones = 1000
+        self.acciones = 10000
         self.rendimiento = 0
 
     def world_builder(self):
@@ -127,7 +127,6 @@ class Agente:
     def think(self):
         while(self.env.acciones>0):
             self.perspective()
-            self.env.print_enviroment()
             if(self.sucio):
                 self.suck()
             else:

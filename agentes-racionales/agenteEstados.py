@@ -57,7 +57,7 @@ class AgenteEstado:
     def think(self):
         while(self.env.acciones>0):
             self.perspective()
-            self.env.print_enviroment()
+            # self.env.print_enviroment()
 
             if(self.sucio):
                 self.suck()
@@ -78,6 +78,9 @@ class AgenteEstado:
                             self.right()    
                     else:
                         #en filas impares voy a la izquierda
+                        if(self.posX==(self.sizeX-1) and self.posY == 0 and self.enInicio):
+                            self.stand()
+                            continue
                         if(self.posY == 0 and self.posX != (self.sizeX-1)):
                             self.down()
                         else:
