@@ -1,5 +1,8 @@
-from agentes import *
-from agenteEstados import AgenteEstado
+from Enviroment import Enviroment
+from AgenteEstados import AgenteEstado
+from AgenteRandom import AgenteRandom
+from AgenteSimple import Agente
+
 import random
             
 env = Enviroment(64,64,80)
