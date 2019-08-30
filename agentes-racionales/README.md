@@ -1,6 +1,7 @@
-#Trabajo práctico agentes racionales
-##Ejercicio C
-####Pruebas agente simple
+# Trabajo práctico agentes racionales
+## Ejercicio C
+#### Pruebas agente simple
+
 Cantidad de cuadros recorridos:
 
 | Entornos/cuadros | 2x2  | 4x4 | 8x8 | 16x16 | 32x32 | 64x64 | 128x128 |
@@ -18,8 +19,8 @@ Porcentaje de cuadros recorrido:
 |0.2     |100%	  |33%    |69.23%  |31.37%  |70.73%  |22.34%  |5.31%   |
 |0.4     |100%    |16.67% |34.62%  |50.98%  |34.63%  |12.09%  |4.79%   |
 |0.8     |100%    |61.54% |17.62%  |18.05%  |45.3%   |16.75%  |4.14%   |
-##Ejercicio D
-####Pruebas agente random
+## Ejercicio D
+#### Pruebas agente random
 Cantidad de cuadros recorridos:
 
 | Entornos/cuadros | 2x2  | 4x4 | 8x8 | 16x16 | 32x32 | 64x64 | 128x128 |
@@ -38,14 +39,19 @@ Porcentaje de cuadros recorrido:
 |0.4     |100%    |83.33%  |69.23%  |51.96%  |22.68%  |4.82%   |1.24%   |
 |0.8     |100%    |76.92%  |64.71%  |37.56%  |22.59%  |4.18%   |1.17%   |
 
-##Ejercicio E
-####2.9)
-**a)** No es posible ya que el agente es incapaz de encontrar el camino con menos pasos posibles.
+## Ejercicio E
+#### 2.9)
+** a)** No es posible ya que el agente es incapaz de encontrar el camino con menos pasos posibles.
 ** b)** En caso de un agente con estados si sería racional ya que el agente sabe por cuales cuadros ha pasado, evitando repetirlos en el proceso.
 ** c)** Suponiendo que la información sólo da la cantidad de cuadros sucios (o limpios), el agente simple seguiría sin ser racional ya que no es capaz de saber por cuales pasó y por cuales no, repitiendo movimientos en el proceso.
 Por otro lado, con esa información es posible hacer un algoritmo más eficiente ya que, por ejemplo, es posible hacer que pare cuando limpie todas. En definitiva seguirá siendo racional.
-####2.10)
-** a)** No, ya que lo único que el algoritmo va a poder hacer es moverse sin un sentido en especial.
-** b)** Puede ya que tiene mas posibilidades de moverse hacia cuadros sucios que el reflexivo normal. El reflexivo normal probablemente se quedaría chocando contra una pared, mientras que el aleatorio puede escapar de ese loop infinito.
-** c)** Mientras más grande sea el mapa, peor se comportará el aleatorio, ya que perderá ciclos de vida intentando limpiar o quedandose quieto.
-** d)** Puede ya que es capaz de guardar información sobre el mundo y evitar tomar las mismas desciciones una y otra vez.
+
+#### 2.10)
+
+**a)** No, ya que lo único que el algoritmo va a poder hacer es moverse sin un sentido en especial.
+
+**b)** Puede ya que tiene mas posibilidades de moverse hacia cuadros sucios que el reflexivo normal. El reflexivo normal probablemente se quedaría chocando contra una pared, mientras que el aleatorio puede escapar de ese loop infinito.
+
+**c)** Mientras más grande sea el mapa, peor se comportará el aleatorio, ya que perderá ciclos de vida intentando limpiar o quedandose quieto.
+
+**d)** Puede ya que es capaz de guardar información sobre el mundo y evitar tomar las mismas desciciones una y otra vez.
