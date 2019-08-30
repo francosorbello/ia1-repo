@@ -41,9 +41,11 @@ Porcentaje de cuadros recorrido:
 
 ## Ejercicio E
 #### 2.9)
-** a)** No es posible ya que el agente es incapaz de encontrar el camino con menos pasos posibles.
-** b)** En caso de un agente con estados si sería racional ya que el agente sabe por cuales cuadros ha pasado, evitando repetirlos en el proceso.
-** c)** Suponiendo que la información sólo da la cantidad de cuadros sucios (o limpios), el agente simple seguiría sin ser racional ya que no es capaz de saber por cuales pasó y por cuales no, repitiendo movimientos en el proceso.
+**a)** No es posible ya que el agente es incapaz de encontrar el camino con menos pasos posibles.
+
+**b)** En caso de un agente con estados si sería racional ya que el agente sabe por cuales cuadros ha pasado, evitando repetirlos en el proceso.
+
+**c)** Suponiendo que la información sólo da la cantidad de cuadros sucios (o limpios), el agente simple seguiría sin ser racional ya que no es capaz de saber por cuales pasó y por cuales no, repitiendo movimientos en el proceso.
 Por otro lado, con esa información es posible hacer un algoritmo más eficiente ya que, por ejemplo, es posible hacer que pare cuando limpie todas. En definitiva seguirá siendo racional.
 
 #### 2.10)
