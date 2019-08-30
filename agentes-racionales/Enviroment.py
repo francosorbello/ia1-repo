@@ -7,20 +7,31 @@ class Enviroment:
         self.agentX = random.randint(0,sizeX-1)
         self.agentY = random.randint(0,sizeY-1)
         self.dirt_rate = dirt_rate 
-        self.world = [[0]*sizeX for i in range(sizeY)]
-        self.acciones = 10000
+        self.world = []
+        self.acciones = 1000
         self.rendimiento = 0
+        self.seed = []
+        self.sucias = 0
 
-    def world_builder(self):
+    #genera un mundo y guarda los valores sucios en un array
+    def seed_generator(self):
         total_casillas = self.sizeX * self.sizeY
         cant_sucias = (self.dirt_rate * total_casillas)/100
         cant_sucias = self.redondeo(cant_sucias)
+        self.sucias = cant_sucias
         while(cant_sucias > 0):
             new_x = random.randint(0,self.sizeX-1)
             new_y = random.randint(0,self.sizeY-1)
-            if(self.world[new_x][new_y] != 1):
-                self.world[new_x][new_y] = 1
-                cant_sucias -= 1
+            cuadro = (new_x,new_y)
+            self.seed.append(cuadro)
+            cant_sucias -= 1
+
+    def world_builder(self):
+        self.world = [[0]*self.sizeX for i in range(self.sizeY)]
+        for cuadro in self.seed:
+            new_x = cuadro[0]
+            new_y = cuadro[1]
+            self.world[new_x][new_y] = 1
             
     def clean(self):
         self.world[self.agentX][self.agentY] = 0
@@ -51,18 +62,23 @@ class Enviroment:
     def redondeo(self,x):
         if (math.floor(x)+0.5)<x:
             return math.ceil(x)
-        return math.floor(x)
+        aux = math.floor(x)
+        if aux==0:
+            return 1
+        return aux
 
     def get_perfomance(self):
         total_casillas = self.sizeX * self.sizeY
-        cant_sucias = (self.dirt_rate * total_casillas)/100
-        cant_sucias = self.redondeo(cant_sucias)
-        print("El agente limpió",self.rendimiento,"cuadros de los",cant_sucias,"cuadros sucios.")
-        ptje_limpio = self.rendimiento * 100 / cant_sucias
+        print("El agente limpió",self.rendimiento,"cuadros de los",self.sucias,"cuadros sucios.")
+        ptje_limpio = self.rendimiento * 100 / self.sucias
         print("Eso es aproximadamente un",round(ptje_limpio,2),"% de la suciedad total.")
     
     def set_perfomance(self):
         self.rendimiento += 1
+
+    def reset_performance(self):
+        self.rendimiento = 0
+        self.acciones = 1000
 
     def print_enviroment(self):
         lenx = self.sizeX

@@ -9,27 +9,27 @@ class Agente:
 
     def up(self):
         self.env.accept_action(self.env.agentX-1,self.env.agentY)
-        print("Move up.")
+        #print("Move up.")
 
     def down(self):
         self.env.accept_action(self.env.agentX+1,self.env.agentY)
-        print("Move down.")
+        #print("Move down.")
 
     def left(self):
         self.env.accept_action(self.env.agentX,self.env.agentY-1)
-        print("Move left.")
+        #print("Move left.")
     
     def right(self):
         self.env.accept_action(self.env.agentX,self.env.agentY+1)
-        print("Move right.")
+        #print("Move right.")
     
     def stand(self):
-        print("Stand.")
+        #print("Stand.")
         self.env.accept_action(self.env.agentX,self.env.agentY)
 
     def suck(self):
         self.env.clean()
-        print("Clean.")
+        #print("Clean.")
 
 
     def perspective(self):
