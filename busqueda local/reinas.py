@@ -49,44 +49,43 @@ def heuristic(board):
     return attacking
 
 n = 8
-board = CreateBoard(n)
-#heurTable es una matriz con los valores de la heuristica
-heurTable = [[0]*n for i in range(n)]
+for a in range(0,100):
+    board = CreateBoard(n)
+    #heurTable es una matriz con los valores de la heuristica
+    # heurTable = [[0]*n for i in range(n)]
 
-# board = [4,5,6,3,4,5,6,5]
-h = heuristic(board)
-life = 0
-while life < 10000:
-    
-    solutions = []
-    for y in range(0,len(board)):
-        tempBoard = CopyList(board)
-        for x in range(0,len(board)):
-            # print("H Inicial:",h)
-            #tempBoard es la tabla con la reina movida
-            tempBoard[y] = x
-            tempH = heuristic(tempBoard)
-            heurTable[x][y] = tempH
-            if(tempH < h):
-                h = tempH
-                solutions.append([x,y])
+    h = heuristic(board)
+    life = 0
+    while life < 1000:
         
+        solutions = []
+        for y in range(0,len(board)):
+            tempBoard = CopyList(board)
+            # print("H actual:",h)
+            for x in range(0,len(board)):
+                #tempBoard es la tabla con la reina movida
+                tempBoard[y] = x
+                tempH = heuristic(tempBoard)
+                # heurTable[x][y] = tempH
+                if(tempH < h):
+                    h = tempH
+                    solutions.append([x,y])
+            
+        #selecciono solucion al azar
+        if len(solutions) > 0:
+            solNum = random.randint(0,len(solutions)-1)
+            newSol = solutions[solNum]
+            board[newSol[1]] = newSol[0]
+        if h==0:
+            break
+        # PrintBoard(heurTable,board)        
+        life += 1
+    print()
+    print("#-----------#")
     # PrintBoard(heurTable,board)        
-    
-    #selecciono solucion al azar
-    if len(solutions) > 0:
-        solNum = random.randint(0,len(solutions)-1)
-        newSol = solutions[solNum]
-        board[newSol[1]] = newSol[0]
-    if h==0:
-        break
-    life += 1
-print()
-print("#-----------#")
-PrintBoard(heurTable,board)        
-print(board)
-print("Intentos:",life)
-print("H final:",h)
+    print(board)
+    print("Intentos:",life)
+    print("H final:",h)
 
 
 
