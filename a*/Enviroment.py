@@ -5,6 +5,9 @@ class Enviroment:
         # self.world = [[0]*self.sizeX for i in range(self.sizeY)]
         self.world = self.SampleMap()
         self.rateObstacle = rateObstacle
+        self.startPos = [0,2]
+        self.endPos = [6,5]
+    
     
     def SampleMap(self):
         map = [["_"]*self.sizeX for i in range(self.sizeY)]
@@ -36,7 +39,30 @@ class Enviroment:
         # aux = input("enter para seguir")
         print("-----------------------------")
 
+    def PrintPath(self,path):
+        lenx = self.sizeX
+        leny = self.sizeY
+        fin = ""
+        valor = ""
+        for i in range(0,lenx):
+            print("[",end="")
+            for j in range(0,leny):
+                if j != leny-1:
+                    fin = ","
+                else:
+                    fin = "]"
 
+                if self.world[i][j]==1:
+                    valor = "#"
+                elif [i,j] in path:
+                    valor = "*"
+                else:
+                    valor = "-"
+                
+                print(valor,end=fin)
+            print("")
+        # aux = input("enter para seguir")
+        print("-----------------------------")                        
 
     def WorldGenerator(self):
         totalSquares = self.sizeX * self.sizeY
@@ -52,6 +78,6 @@ class Enviroment:
         cases = [ [x+1,y],[x-1,y],[x,y+1],[x,y-1] ]
         for move in cases:
             #para cada caso me fijo que no se salga de los limites ni que sea obstaculo
-            if(move[0]<self.sizeX and move[1]<self.sizeY and self.world[move[0]][move[1]]):
+            if(move[0]>-1 and move[1]>-1 and move[0]<self.sizeX and move[1]<self.sizeY and self.world[move[0]][move[1]] != 1):
                 neighbors.append(move)
         return neighbors

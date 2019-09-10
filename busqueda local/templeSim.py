@@ -84,6 +84,3 @@ print("#-----------#")
 print(board)
 print("Intentos:",life)
 print("H final:",h)
-
-
-
