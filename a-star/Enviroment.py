@@ -1,10 +1,11 @@
+import random
 from PyColor import *
 class Enviroment:
     def __init__(self,sizeX,sizeY,rateObstacle):
         self.sizeX = sizeX
         self.sizeY = sizeY
-        # self.world = [[0]*self.sizeX for i in range(self.sizeY)]
-        self.world = self.SampleMap2()
+        self.world = [[0]*self.sizeX for i in range(self.sizeY)]
+        #self.world = self.SampleMap2()
         self.rateObstacle = rateObstacle
         self.startPos = [0,0]
         self.endPos = [6,1]
@@ -82,13 +83,27 @@ class Enviroment:
         print("-----------------------------")                        
 
     def WorldGenerator(self):
+        #genero obstaculos
         totalSquares = self.sizeX * self.sizeY
         obstacles = (self.rateObstacle * totalSquares)/100
         while(obstacles > 0):
             x = random.randint(0,self.sizeX-1)
             y = random.randint(0,self.sizeY-1)
             self.world[x][y] = 1
+            obstacles -= 1
+            
+        #genero posicion inicial y final
+        self.startPos = self.PositionGenerator()
+        self.endPos = self.PositionGenerator()
 
+    def PositionGenerator(self):
+        while True:
+            x = random.randint(0,self.sizeX-1)
+            y = random.randint(0,self.sizeY-1)
+            if self.world[x][y] != 1:
+                break
+        return [x,y]
+            
     def GetNeighbors(self,x,y):
         neighbors = []
         #cases = arriba, abajo, derecha, izquierda
