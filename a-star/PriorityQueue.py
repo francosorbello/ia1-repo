@@ -26,12 +26,7 @@ class PriorityQueue:
     def Dequeue(self):
         aux = self.queue.pop(0)
         return aux.value
-    
-    def Exists(self,position):
-        for elem in self.queue:
-            if [elem.value.x,elem.value.y] == position:
-                return True
-        return False
+        
     def Search(self,position):
         i = 0
         for elem in self.queue:

@@ -47,8 +47,7 @@ class Enviroment:
                 
                 print(valor,end=fin)
             print("")
-        # aux = input("enter para seguir")
-        print("-----------------------------")
+        #print("-----------------------------")
 
     def PrintPath(self,path):
         lenx = self.sizeX

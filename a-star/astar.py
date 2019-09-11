@@ -13,9 +13,6 @@ class Node:
         
     def GetPosition(self):
         return [self.x,self.y]
-    
-    def UpdateFscore(self):
-        self.fScore = self.gScore + self.hScore
         
 class AStar:
     def __init__(self,startPos,endPos,env):
@@ -23,7 +20,6 @@ class AStar:
         self.endPos = endPos
         self.openList = PriorityQueue()
         self.closedList = []
-        self.path = []
         self.env = env
     
     def Manhattan(self,start,end):
@@ -47,10 +43,8 @@ class AStar:
         start = Node(self.startPos[0],self.startPos[1],None)
         start.gScore = self.Manhattan(self.startPos,start.GetPosition())
         start.hScore = self.Manhattan(self.endPos,start.GetPosition())
-        start.UpdateFscore()
+        start.fScore = start.gScore + start.hScore
             
-        G = start.gScore
-        
         self.openList.Enqueue(start,start.fScore)
         
         while self.openList.Length() > 0:
@@ -60,14 +54,13 @@ class AStar:
             
             #si estoy en el nodo objetivo, termino
             if current.GetPosition() == self.endPos:
-                print("ENCONTRADO")
                 path = []
                 while current is not None:
                     path.append(current.GetPosition())
                     current = current.parent
                 
                 self.env.PrintPath(path)
-                break
+                return
             
             #genero los vecinos
             neighbours = self.env.GetNeighbors(current.x,current.y)
@@ -78,15 +71,16 @@ class AStar:
                 #calculo f para el vecino
                 neirNode.gScore = self.Manhattan(self.startPos,neirNode.GetPosition())
                 neirNode.hScore = self.Manhattan(self.endPos,neirNode.GetPosition())
-                neirNode.UpdateFscore()
+                neirNode.fScore = neirNode.gScore + neirNode.hScore
                 
                 #si ya esta en los visitados lo ignoro
                 if(self.isInClosedList(neirNode)):
                     continue
                 
                 #si ya hay un camino mejor en la frontera lo ignoro.
-                #Que el gScore
                 auxSearch = self.openList.Search(neirNode)
                 if auxSearch != -1 and self.openList[auxSearch].value.gScore > neirNode.gScore:
                     continue        
                 self.openList.Enqueue(neirNode,neirNode.fScore)
+                
+        print("No se encontró solución.")
