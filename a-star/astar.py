@@ -1,45 +1,12 @@
-class QueueNode:
-    def __init__(self,value,priority):
-        self.value = value
-        self.priority = priority
-        
-class PriorityQueue:
-    def __init__(self):
-        self.queue = []
-        
-    def Length(self):
-        return len(self.queue)
-    
-    def Enqueue(self,elem,priority):
-        node = QueueNode(elem,priority)
-        if len(self.queue) == 0:
-            self.queue.append(node)
-            return
-        
-        for i in range(0,len(self.queue)):
-            if priority < self.queue[i].priority:
-                self.queue.insert(node)
-                return
-        
-        self.queue.append(node)
-        
-    def Dequeue(self):
-        aux = self.queue.pop(0)
-        return aux.value
-    
-    def Exists(self,position):
-        for elem in self.queue:
-            if [elem.value.x,elem.value.y] == position:
-                return True
-        return False
-        
+from PriorityQueue import PriorityQueue
 class Node:
-    def __init__(self,x,y):
+    def __init__(self,x,y,parent):
         self.x = x
         self.y = y
         self.gScore = 0
         self.hScore = 0
         self.fScore = 0
+        self.parent = parent
     
     def __str__(self):
         return "["+str(self.x)+","+str(self.y)+"]"
@@ -77,40 +44,48 @@ class AStar:
     
     def Search(self):
         
-        start = Node(self.startPos[0],self.startPos[1])
+        start = Node(self.startPos[0],self.startPos[1],None)
         start.gScore = self.Manhattan(self.startPos,start.GetPosition())
         start.hScore = self.Manhattan(self.endPos,start.GetPosition())
         start.UpdateFscore()
-
+            
+        G = start.gScore
+        
         self.openList.Enqueue(start,start.fScore)
         
         while self.openList.Length() > 0:
-            
+            #obtengo el nodo con menor f y lo guardo en los visitados
             current = self.openList.Dequeue()
             self.closedList.append(current)
             
+            #si estoy en el nodo objetivo, termino
             if current.GetPosition() == self.endPos:
                 print("ENCONTRADO")
-                aux = []
-                for elm in self.closedList:
-                    aux.append(elm.GetPosition())
-                    print(elm)
-                self.env.PrintPath(aux)
+                path = []
+                while current is not None:
+                    path.append(current.GetPosition())
+                    current = current.parent
+                
+                self.env.PrintPath(path)
                 break
             
+            #genero los vecinos
             neighbours = self.env.GetNeighbors(current.x,current.y)
             for neigbhour in neighbours:
                 
-                neirNode = Node(neigbhour[0],neigbhour[1])
-                
-                #si ya esta en la frontera lo ignoro
-                if(self.openList.Exists(neigbhour)):
-                    continue
-                
+                neirNode = Node(neigbhour[0],neigbhour[1],current)
+
                 #calculo f para el vecino
                 neirNode.gScore = self.Manhattan(self.startPos,neirNode.GetPosition())
                 neirNode.hScore = self.Manhattan(self.endPos,neirNode.GetPosition())
                 neirNode.UpdateFscore()
-                #si f es menor que el score actual y el nodo no fue visitado lo añado a la frontera
-                if neirNode.fScore <= current.fScore and not self.isInClosedList(neirNode):
-                    self.openList.Enqueue(neirNode,neirNode.fScore)
+                
+                #si ya esta en los visitados lo ignoro
+                if(self.isInClosedList(neirNode)):
+                    continue
+                
+                #si ya hay un camino mejor en la frontera lo ignoro
+                auxSearch = self.openList.Search(neirNode)
+                if auxSearch != -1 and self.openList[auxSearch].value.gScore > neirNode.gScore:
+                    continue        
+                self.openList.Enqueue(neirNode,neirNode.fScore)
