@@ -1,12 +1,13 @@
+from PyColor import *
 class Enviroment:
     def __init__(self,sizeX,sizeY,rateObstacle):
         self.sizeX = sizeX
         self.sizeY = sizeY
         # self.world = [[0]*self.sizeX for i in range(self.sizeY)]
-        self.world = self.SampleMap()
+        self.world = self.SampleMap2()
         self.rateObstacle = rateObstacle
-        self.startPos = [0,2]
-        self.endPos = [6,5]
+        self.startPos = [0,0]
+        self.endPos = [6,1]
     
     
     def SampleMap(self):
@@ -14,6 +15,15 @@ class Enviroment:
         for i in range(0,5):
             map[i][3] = 1
         map[i][2]=1
+        return map
+    
+    def SampleMap2(self):
+        map = [["_"]*self.sizeX for i in range(self.sizeY)]
+        for i in range(0,4):
+            map[i][3] = 1
+        for j in range(0,3):
+            map[i][j] = 1
+        map[2][3] = "_"
         return map
 
     def print_enviroment(self):
@@ -51,13 +61,20 @@ class Enviroment:
                     fin = ","
                 else:
                     fin = "]"
+                
 
                 if self.world[i][j]==1:
                     valor = "#"
                 elif [i,j] in path:
-                    valor = "*"
+                    valor = "\033[92m{}\033[00m" .format("*")
                 else:
                     valor = "-"
+
+                if [i,j] == self.startPos:
+                    valor = "\033[93m{}\033[00m" .format("I")
+
+                if [i,j] == self.endPos:
+                    valor = "\033[93m{}\033[00m" .format("F")
                 
                 print(valor,end=fin)
             print("")

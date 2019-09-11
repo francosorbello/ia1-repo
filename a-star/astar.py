@@ -84,7 +84,8 @@ class AStar:
                 if(self.isInClosedList(neirNode)):
                     continue
                 
-                #si ya hay un camino mejor en la frontera lo ignoro
+                #si ya hay un camino mejor en la frontera lo ignoro.
+                #Que el gScore
                 auxSearch = self.openList.Search(neirNode)
                 if auxSearch != -1 and self.openList[auxSearch].value.gScore > neirNode.gScore:
                     continue        
