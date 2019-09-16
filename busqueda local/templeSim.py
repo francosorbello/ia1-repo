@@ -54,9 +54,12 @@ board = CreateBoard(n)
 h = heuristic(board)
 life = 0
 #t=a*x:funcion schedule
-t=1
-while life < 1000:
-    t = -life+1001
+t=10000
+
+coolingT = 0.003
+
+while life < 10000:
+#    t = -life+1001
     tempBoard = board.copy()
     
     #obtengos vecino random
@@ -72,11 +75,16 @@ while life < 1000:
     else:
         prob = random.randint(0,99) / 100
         e = math.exp((h-tempH)/t)
-        if(prob>e and t>0):
+        if (e<=0):
+            break
+        
+        if(prob>e):
             h = tempH
             solution = [x,y]
+            
     board[y] = x
     life += 1
+    t *= 1-coolingT
 
 print()
 print("#-----------#")
