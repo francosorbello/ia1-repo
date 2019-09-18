@@ -73,8 +73,8 @@ def Selection2(population):
         #selecciono una de las soluciones con mejor fitness al azar
         sol = random.randint(0,len(individuals)-1)
         #si el individuo ya fue seleccionado lo ignoro
-        if (selected.count(individuals[sol]) > 0):
-            continue
+        #if (selected.count(individuals[sol]) > 0):
+        #    continue
         
         selected.append(individuals[sol])
         aux += 1
@@ -88,11 +88,12 @@ def replace(parent,changeMap):
 #almacena los individuos en un mapa segun su fitness
 def generatePopulation(individuals):
     population = {}
+    keys = population.keys()
     for elem in individuals:
         #calculo fitness
         hInd = heuristic(elem)
         #si la key no existe creo un nuevo elemento
-        if (population.keys().isdisjoint([hInd])):
+        if (keys.isdisjoint([hInd])):
             population[hInd] = []
             
         population[hInd].append(elem)
@@ -123,13 +124,11 @@ def Evolution(population):
             parent2[x2] : parent1[x2]
         }
         
-        newParent1 = parent1.copy()
-        newParent1 = replace(newParent1,changeMap)
-        newPopulation.append(newParent1.copy())
+        parent1 = replace(parent1,changeMap)
+        newPopulation.append(parent1.copy())
         
-        newParent2 = parent2.copy()
-        newParent2 = replace(newParent2,changeMap)
-        newPopulation.append(newParent2.copy())
+        parent2 = replace(parent2,changeMap)
+        newPopulation.append(parent2.copy())
         aux += 1
     
     return newPopulation
@@ -177,7 +176,7 @@ life = 0
 #sumFitness = getAllFitness(population)
 val = 0
 selected = []
-while life < 300:
+while life < 1000:
     life+=1
     selected = Selection2(population)
     evolved = Evolution(selected)
