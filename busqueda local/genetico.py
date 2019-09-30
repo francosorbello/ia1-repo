@@ -1,11 +1,10 @@
 import random
 
 #devuelve la suma de todos los fitness
-def getAllFitness(dict):
-    fitList = list(dict.keys())
+def getAllFitness(diccionario):
     fitness = 0
-    for elem in fitList:
-        fitness += elem
+    for key,elems in diccionario:
+        fitness += len(diccionario[key])
     return fitness
 
 def PrintBoard(heurBoard,board):
@@ -31,13 +30,6 @@ def PrintBoard(heurBoard,board):
     # aux = input("enter para seguir")
     print("-----------------------------")
 
-def CreateBoard(n):
-    board = [0]*8
-    for i in range(0,n):
-        queenPos = random.randint(0,n-1)
-        board[i] = queenPos
-    return board
-
 #seleccion proporcional
 def Selection(population):
     #obtengo los fitness de la poblacion
@@ -46,13 +38,12 @@ def Selection(population):
     sumFitness = sum(list(population.keys()))
 
     for fit,fitList in population.items():
-        aux = 1-(fit/sumFitness)
         pr += (fit/sumFitness)
-        """if(pr > randProb):
+        if(pr > randProb):
            print("encontrado")
            print(pr)
            print(fitList)
-           return fitList"""
+           return fitList
     print("PR:",pr)
 
 #seleccion por torneo
@@ -72,7 +63,7 @@ def Selection2(population):
             individuals = population[fit2]
         #selecciono una de las soluciones con mejor fitness al azar
         sol = random.randint(0,len(individuals)-1)
-        #si el individuo ya fue seleccionado lo ignoro
+        #si el individuo ya fue seleccionado lo ignoro. Comentado porque bajaba mucho la performance
         #if (selected.count(individuals[sol]) > 0):
         #    continue
         
@@ -100,6 +91,22 @@ def generatePopulation(individuals):
         
     return population
         
+
+def Mutation(population,size):
+    rndKey = random.randint(0,len(population.keys())-1)
+    individuals = population[list(population.keys())[rndKey]]
+    while size > 0:
+        #selecciono individuo(s) al azar
+        rndInd = random.randint(0,len(individuals)-1)
+        genoma = individuals[rndInd]
+        #selecciono elementos a permutar al azar
+        aux1 = random.randint(0,len(genoma)-1)
+        aux2 = random.randint(0,len(genoma)-1)
+        auxVal = genoma[aux1]
+        genoma[aux1] = genoma[aux2]
+        genoma[aux2] = auxVal
+        size -= 1
+    return population
 
 #genera nuevas cadenas a partir del metodo PMX
 def Evolution(population):
@@ -144,49 +151,55 @@ def heuristic(board):
                 attacking += 1
     return attacking
 
-n = 8
-#board = CreateBoard(n)
-
-#creo poblacion inicial
-populationSize = 100
-#population = { fitness : [individuos] }
-population = {}
-aux = 1
-board = [0,1,2,3,4,5,6,7]
-population[heuristic(board)] = [board]
-while aux < populationSize:
-    
-    y1 = random.randint(0,len(board)-1)
-    y2 = random.randint(0,len(board)-1)
-    
-    tempX = board[y1]
-    board[y1] = board[y2]
-    board[y2] = tempX
-    hSol = heuristic(board)
-    
-    #si la key no existe creo un nuevo elemento
-    if (population.keys().isdisjoint([hSol])):
-        population[hSol] = []
+def ExecGenetic(n):
+    #creo poblacion inicial
+    populationSize = 100
+    #population = { fitness : [individuos] }
+    population = {}
+    aux = 1
+    board = [x for x in range(0,n)]
+    population[heuristic(board)] = [board]
+    while aux < populationSize:
         
-    population[hSol].append(board.copy())
-    aux += 1
+        y1 = random.randint(0,len(board)-1)
+        y2 = random.randint(0,len(board)-1)
+        
+        tempX = board[y1]
+        board[y1] = board[y2]
+        board[y2] = tempX
+        hSol = heuristic(board)
+        
+        #si la key no existe creo un nuevo elemento
+        if (population.keys().isdisjoint([hSol])):
+            population[hSol] = []
+            
+        population[hSol].append(board.copy())
+        aux += 1
 
 
-life = 0
-#sumFitness = getAllFitness(population)
-val = 0
-selected = []
-while life < 1000:
-    life+=1
-    selected = Selection2(population)
-    evolved = Evolution(selected)
-    population = generatePopulation(evolved)
-    bestFit = min(list(population.keys()))
-    if (bestFit == 0):
-        break
-    
-print("Intentos:",life+1)
-fSol = min(list(population.keys()))
-solution = population[fSol][0]
-print(solution)
-print("Fitness:",fSol)
+    life = 0
+    #sumFitness = getAllFitness(population)
+    val = 0
+    selected = []
+    mutProb = 0.01 #probabilidad de mutar
+    mutCant = 1 #porcentaje de la poblacion que muto
+    while life < 1000:
+        life+=1
+        selected = Selection2(population)
+        randMut = random.randint(0,100) / 100
+        evolved = Evolution(selected)
+        population = generatePopulation(evolved)
+        if mutProb == randMut:
+            size = mutCant*populationSize/100
+            Mutation(population,size)
+
+        bestFit = min(list(population.keys()))
+        if (bestFit == 0):
+            break
+        
+    print("Intentos:",life+1)
+    fSol = min(list(population.keys()))
+    solution = population[fSol][0]
+    print(solution)
+    print("Fitness:",fSol)
+    return fSol

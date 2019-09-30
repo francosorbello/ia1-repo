@@ -31,11 +31,16 @@ def PrintBoard(heurBoard,board):
     print("-----------------------------")
 
 def CreateBoard(n):
-    board = [0]*8
-    for i in range(0,n):
-        queenPos = random.randint(0,n-1)
-        board[i] = queenPos
+    board = [0]*n
+    posibilities = [x for x in range(0,n)]
+    x = 0
+    while len(posibilities)>0:
+        i = random.randint(0,len(posibilities)-1)
+        elem = posibilities.pop(i)
+        board[x] = elem
+        x += 1
     return board
+
 
 #retorna el nro de pares de reinas atacandose
 def heuristic(board):
@@ -48,47 +53,47 @@ def heuristic(board):
                 attacking += 1
     return attacking
 
-n = 8
-board = CreateBoard(n)
+def ExecTempleSim(n):
+    board = CreateBoard(n)
 
-h = heuristic(board)
-life = 0
-#t=a*x:funcion schedule
-t=10000
+    h = heuristic(board)
+    life = 0
+    #t=a*x:funcion schedule
+    t=10000
 
-coolingT = 0.003
+    coolingT = 0.003
 
-while life < 10000:
-#    t = -life+1001
-    tempBoard = board.copy()
-    
-    #obtengos vecino random
-    y = random.randint(0,len(board)-1)
-    x = random.randint(0,len(board)-1)
-    
-    tempBoard[y] = x
-    tempH = heuristic(tempBoard)
-    #si menos reinas se comen es una solucion mejor
-    if(tempH < h):
-        h = tempH
-        solution = [x,y]
-    else:
-        prob = random.randint(0,99) / 100
-        e = math.exp((h-tempH)/t)
-        if (e<=0):
-            break
+    while life < 10000:
+    #    t = -life+1001
+        tempBoard = board.copy()
         
-        if(prob>e):
+        #obtengos vecino random
+        y = random.randint(0,len(board)-1)
+        x = random.randint(0,len(board)-1)
+        
+        tempBoard[y] = x
+        tempH = heuristic(tempBoard)
+        #si menos reinas se comen es una solucion mejor
+        if(tempH < h):
             h = tempH
             solution = [x,y]
+        else:
+            prob = random.randint(0,99) / 100
+            e = math.exp((h-tempH)/t)
+            if (e<=0):
+                break
             
-    board[y] = x
-    life += 1
-    t *= 1-coolingT
+            if(prob>e):
+                h = tempH
+                solution = [x,y]
+                
+        board[y] = x
+        life += 1
+        t *= 1-coolingT
 
-print()
-print("#-----------#")
-# PrintBoard(heurTable,board)        
-print(board)
-print("Intentos:",life)
-print("H final:",h)
+    print()
+    print("#-----------#")
+    # PrintBoard(heurTable,board)        
+    print(board)
+    print("Intentos:",life)
+    print("H final:",h)

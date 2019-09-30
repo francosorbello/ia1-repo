@@ -31,10 +31,14 @@ def PrintBoard(heurBoard,board):
     print("-----------------------------")
 
 def CreateBoard(n):
-    board = [0]*8
-    for i in range(0,n):
-        queenPos = random.randint(0,n-1)
-        board[i] = queenPos
+    board = [0]*n
+    posibilities = [x for x in range(0,n)]
+    x = 0
+    while len(posibilities)>0:
+        i = random.randint(0,len(posibilities)-1)
+        elem = posibilities.pop(i)
+        board[x] = elem
+        x += 1
     return board
 
 #retorna el nro de pares de reinas atacandose
@@ -48,44 +52,40 @@ def heuristic(board):
                 attacking += 1
     return attacking
 
-n = 8
-for a in range(0,100):
-    board = CreateBoard(n)
-    #heurTable es una matriz con los valores de la heuristica
-    # heurTable = [[0]*n for i in range(n)]
+def ExecHillClimb(n):
+    for a in range(0,100):
+        board = CreateBoard(n)
+        #heurTable es una matriz con los valores de la heuristica
+        # heurTable = [[0]*n for i in range(n)]
 
-    h = heuristic(board)
-    life = 0
-    while life < 1000:
-        
-        solutions = []
-        for y in range(0,len(board)):
-            tempBoard = CopyList(board)
-            # print("H actual:",h)
-            for x in range(0,len(board)):
-                #tempBoard es la tabla con la reina movida
-                tempBoard[y] = x
-                tempH = heuristic(tempBoard)
-                # heurTable[x][y] = tempH
-                if(tempH < h):
-                    h = tempH
-                    solutions.append([x,y])
-            
-        #selecciono solucion al azar
-        if len(solutions) > 0:
-            solNum = random.randint(0,len(solutions)-1)
-            newSol = solutions[solNum]
-            board[newSol[1]] = newSol[0]
-        if h==0:
-            break
-        # PrintBoard(heurTable,board)        
-        life += 1
+        h = heuristic(board)
+        life = 1001
+        while life < 1000:
+            solutions = []
+            for y in range(0,len(board)):
+                tempBoard = CopyList(board)
+                # print("H actual:",h)
+                for x in range(0,len(board)):
+                    #tempBoard es la tabla con la reina movida
+                    tempBoard[y] = x
+                    tempH = heuristic(tempBoard)
+                    # heurTable[x][y] = tempH
+                    if(tempH < h):
+                        h = tempH
+                        solutions.append([x,y])
+                
+            #selecciono solucion al azar
+            if len(solutions) > 0:
+                solNum = random.randint(0,len(solutions)-1)
+                newSol = solutions[solNum]
+                board[newSol[1]] = newSol[0]
+            if h==0:
+                break
+            # PrintBoard(heurTable,board)        
+            life += 1
     print()
     print("#-----------#")
-    # PrintBoard(heurTable,board)        
     print(board)
     print("Intentos:",life)
     print("H final:",h)
-
-
-
+    return h

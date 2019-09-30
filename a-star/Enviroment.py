@@ -10,7 +10,6 @@ class Enviroment:
         self.startPos = [0,0]
         self.endPos = [6,1]
     
-    
     def SampleMap(self):
         map = [["_"]*self.sizeX for i in range(self.sizeY)]
         for i in range(0,5):
@@ -20,11 +19,12 @@ class Enviroment:
     
     def SampleMap2(self):
         map = [["_"]*self.sizeX for i in range(self.sizeY)]
-        for i in range(0,4):
-            map[i][3] = 1
-        for j in range(0,3):
-            map[i][j] = 1
-        map[2][3] = "_"
+        map[1][2] = 1
+        map[1][3] = 1
+        map[1][4] = 1
+        map[2][2] = 1
+        map[3][2] = 1
+        
         return map
 
     def print_enviroment(self):
