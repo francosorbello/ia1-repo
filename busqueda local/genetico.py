@@ -1,9 +1,14 @@
 import random
 
+def CountElems(mapa):
+    aux = 0
+    for key in mapa:
+        aux += len(mapa[key])
+    return aux
 #devuelve la suma de todos los fitness
 def getAllFitness(diccionario):
     fitness = 0
-    for key,elems in diccionario:
+    for key in diccionario:
         fitness += len(diccionario[key])
     return fitness
 
@@ -40,7 +45,6 @@ def Selection(population):
     for fit,fitList in population.items():
         pr += (fit/sumFitness)
         if(pr > randProb):
-           print("encontrado")
            print(pr)
            print(fitList)
            return fitList
@@ -70,6 +74,7 @@ def Selection2(population):
         selected.append(individuals[sol])
         aux += 1
     return selected
+
 def replace(parent,changeMap):
     for i in range(0,len(parent)):
         parent[i] = changeMap.get(parent[i],parent[i])
@@ -131,13 +136,63 @@ def Evolution(population):
             parent2[x2] : parent1[x2]
         }
         
-        parent1 = replace(parent1,changeMap)
-        newPopulation.append(parent1.copy())
+        newParent1 = replace(parent1.copy(),changeMap)
+        newPopulation.append(newParent1.copy())
         
-        parent2 = replace(parent2,changeMap)
-        newPopulation.append(parent2.copy())
+        newParent2 = replace(parent2.copy(),changeMap)
+        newPopulation.append(newParent2.copy())
         aux += 1
     
+    return newPopulation
+
+def Contains(lista,elem):
+    if(lista.count(elem)>0):
+        return True
+    return False
+
+def crossover(parent,child):
+    ic = 0
+    while len(parent)>0 and ic<len(child):
+        #si la pos no esta vacia la ignoro
+        if child[ic] != -1:
+            ic += 1
+            continue
+
+        elem = parent.pop(0)
+        if not Contains(child,elem):
+            child[ic] = elem
+            ic += 1
+    return child
+
+#evolucion por crossover
+def Evolution2(population):
+    x1 = 3
+    x2 = 4
+    newPopulation = []
+    aux = 0
+    while aux<50:
+        #selecciono 2 padres al azar
+        rand1 = random.randint(0,len(population)-1)
+        rand2 = random.randint(0,len(population)-1)
+        if(rand1 == rand2):
+            continue
+        parent1 = population[rand1]
+        parent2 = population[rand2]
+        
+        #creo los hijos
+        child1 = [-1]*len(parent1)
+        child1[x1] = parent1[x1]
+        child1[x2] = parent1[x2]
+
+        child2 = [-1]*len(parent1)
+        child2[x1] = parent2[x1]
+        child2[x2] = parent2[x2]
+        
+        child1 = crossover(parent2.copy(),child1.copy())
+        newPopulation.append(child1.copy())
+        child2 = crossover(parent1.copy(),child2.copy())
+        newPopulation.append(child2.copy())
+        aux+=1
     return newPopulation
 
 #retorna el nro de pares de reinas atacandose
@@ -175,31 +230,31 @@ def ExecGenetic(n):
             
         population[hSol].append(board.copy())
         aux += 1
-
-
+        
     life = 0
     #sumFitness = getAllFitness(population)
-    val = 0
     selected = []
-    mutProb = 0.01 #probabilidad de mutar
+    mutProb = 0.1 #probabilidad de mutar
     mutCant = 1 #porcentaje de la poblacion que muto
     while life < 1000:
         life+=1
         selected = Selection2(population)
         randMut = random.randint(0,100) / 100
-        evolved = Evolution(selected)
+        evolved = Evolution2(selected)
         population = generatePopulation(evolved)
+        
         if mutProb == randMut:
             size = mutCant*populationSize/100
             Mutation(population,size)
-
+        #print(population.keys())
         bestFit = min(list(population.keys()))
         if (bestFit == 0):
             break
         
-    print("Intentos:",life+1)
+    print("Intentos:",life)
     fSol = min(list(population.keys()))
     solution = population[fSol][0]
     print(solution)
     print("Fitness:",fSol)
     return fSol
+#ExecGenetic(8)

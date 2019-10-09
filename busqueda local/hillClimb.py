@@ -1,4 +1,5 @@
 import random
+from PriorityQueue import PriorityQueue
 
 def CopyList(lista):
     nList = []
@@ -56,28 +57,25 @@ def ExecHillClimb(n):
     for a in range(0,100):
         board = CreateBoard(n)
         #heurTable es una matriz con los valores de la heuristica
-        # heurTable = [[0]*n for i in range(n)]
 
         h = heuristic(board)
-        life = 1001
+        life = 0
         while life < 1000:
-            solutions = []
+            solutions = PriorityQueue()
+
             for y in range(0,len(board)):
                 tempBoard = CopyList(board)
-                # print("H actual:",h)
                 for x in range(0,len(board)):
                     #tempBoard es la tabla con la reina movida
                     tempBoard[y] = x
                     tempH = heuristic(tempBoard)
-                    # heurTable[x][y] = tempH
                     if(tempH < h):
                         h = tempH
-                        solutions.append([x,y])
+                        solutions.Enqueue([x,y],tempH)
                 
             #selecciono solucion al azar
             if len(solutions) > 0:
-                solNum = random.randint(0,len(solutions)-1)
-                newSol = solutions[solNum]
+                newSol = solutions.Dequeue()[solNum]
                 board[newSol[1]] = newSol[0]
             if h==0:
                 break

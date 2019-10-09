@@ -58,13 +58,8 @@ def ExecTempleSim(n):
 
     h = heuristic(board)
     life = 0
-    #t=a*x:funcion schedule
-    t=10000
-
-    coolingT = 0.003
 
     while life < 10000:
-    #    t = -life+1001
         tempBoard = board.copy()
         
         #obtengos vecino random
@@ -73,27 +68,29 @@ def ExecTempleSim(n):
         
         tempBoard[y] = x
         tempH = heuristic(tempBoard)
+        
         #si menos reinas se comen es una solucion mejor
-        if(tempH < h):
+        if(tempH <= h):
             h = tempH
             solution = [x,y]
-        else:
-            prob = random.randint(0,99) / 100
-            e = math.exp((h-tempH)/t)
-            if (e<=0):
+            board[y] = x
+            if h==0:
                 break
-            
-            if(prob>e):
+        else:
+            prob = random.random()
+            t = (10000-life+1)/10000
+            e = math.exp((h-tempH)/t)
+            if(prob < e):
                 h = tempH
                 solution = [x,y]
-                
-        board[y] = x
+                board[y] = x
+        
         life += 1
-        t *= 1-coolingT
-
     print()
     print("#-----------#")
     # PrintBoard(heurTable,board)        
     print(board)
     print("Intentos:",life)
     print("H final:",h)
+    return h
+ExecTempleSim(8)
