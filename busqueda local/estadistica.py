@@ -8,5 +8,8 @@ def getVarianza(datos,media):
 
 def calcEstadistica(datos):
     media = sum(datos)/len(datos)
+    print("media:",media)
     varianza = getVarianza(datos,media)
     desviacion = math.sqrt(varianza)
+    print("desviacion:",desviacion)
+    

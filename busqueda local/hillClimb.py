@@ -6,8 +6,7 @@ def CopyList(lista):
     for i in lista:
         nList.append(i)
     return nList
-    
-    return list
+
 def PrintBoard(heurBoard,board):
     lenx = len(heurBoard)
     leny = len(heurBoard)
@@ -54,36 +53,36 @@ def heuristic(board):
     return attacking
 
 def ExecHillClimb(n):
-    for a in range(0,100):
-        board = CreateBoard(n)
-        #heurTable es una matriz con los valores de la heuristica
+    board = CreateBoard(n)
+    #heurTable es una matriz con los valores de la heuristica
 
-        h = heuristic(board)
-        life = 0
-        while life < 1000:
-            solutions = PriorityQueue()
+    h = heuristic(board)
+    life = 0
+    while life < 1000:
+        solutions = PriorityQueue()
 
-            for y in range(0,len(board)):
-                tempBoard = CopyList(board)
-                for x in range(0,len(board)):
-                    #tempBoard es la tabla con la reina movida
-                    tempBoard[y] = x
-                    tempH = heuristic(tempBoard)
-                    if(tempH < h):
-                        h = tempH
-                        solutions.Enqueue([x,y],tempH)
-                
-            #selecciono solucion al azar
-            if len(solutions) > 0:
-                newSol = solutions.Dequeue()[solNum]
-                board[newSol[1]] = newSol[0]
-            if h==0:
-                break
-            # PrintBoard(heurTable,board)        
-            life += 1
-    print()
-    print("#-----------#")
-    print(board)
-    print("Intentos:",life)
-    print("H final:",h)
-    return h
+        for y in range(0,len(board)):
+            tempBoard = board.copy()
+            for x in range(0,len(board)):
+                #tempBoard es la tabla con la reina movida
+                tempBoard[y] = x
+                tempH = heuristic(tempBoard)
+                if(tempH < h):
+                    h = tempH
+                    solutions.Enqueue([x,y],tempH)
+            
+        #selecciono solucion al azar
+        if solutions.Length() > 0:
+            newSol = solutions.Dequeue()
+            board[newSol[1]] = newSol[0]
+        if h==0:
+            break
+        # PrintBoard(heurTable,board)        
+        life += 1
+    # print()
+    # print("#-----------#")
+    # print(board)
+    # print("Intentos:",life)
+    # print("H final:",h)
+    return (h,life)
+# ExecHillClimb(8)

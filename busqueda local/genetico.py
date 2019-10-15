@@ -5,6 +5,7 @@ def CountElems(mapa):
     for key in mapa:
         aux += len(mapa[key])
     return aux
+
 #devuelve la suma de todos los fitness
 def getAllFitness(diccionario):
     fitness = 0
@@ -12,32 +13,9 @@ def getAllFitness(diccionario):
         fitness += len(diccionario[key])
     return fitness
 
-def PrintBoard(heurBoard,board):
-    lenx = len(heurBoard)
-    leny = len(heurBoard)
-    fin = ""
-    valor = ""
-    for i in range(0,lenx):
-        print("[",end="")
-        for j in range(0,leny):
-            if j != leny-1:
-                fin = ","
-            else:
-                fin = "]"
-            
-            if i == board[j]:
-                valor = "#"
-            else:
-                valor = heurBoard[i][j]
-
-            print(valor,end=fin)
-        print("")
-    # aux = input("enter para seguir")
-    print("-----------------------------")
-
 #seleccion proporcional
-def Selection(population):
-    #obtengo los fitness de la poblacion
+def SelectionProp(population):
+
     randProb = random.randint(0,100) / 100
     pr = 0
     sumFitness = sum(list(population.keys()))
@@ -51,7 +29,7 @@ def Selection(population):
     print("PR:",pr)
 
 #seleccion por torneo
-def Selection2(population):
+def SelectionTour(population):
     aux = 0
     fitList = list(population.keys())
     selected = []
@@ -95,7 +73,6 @@ def generatePopulation(individuals):
         population[hInd].append(elem)
         
     return population
-        
 
 def Mutation(population,size):
     rndKey = random.randint(0,len(population.keys())-1)
@@ -114,7 +91,7 @@ def Mutation(population,size):
     return population
 
 #genera nuevas cadenas a partir del metodo PMX
-def Evolution(population):
+def EvolutionPMX(population):
     x1 = 3
     x2 = 4
     newPopulation = []
@@ -165,7 +142,7 @@ def crossover(parent,child):
     return child
 
 #evolucion por crossover
-def Evolution2(population):
+def EvolutionCross(population):
     x1 = 3
     x2 = 4
     newPopulation = []
@@ -238,9 +215,9 @@ def ExecGenetic(n):
     mutCant = 1 #porcentaje de la poblacion que muto
     while life < 1000:
         life+=1
-        selected = Selection2(population)
+        selected = SelectionTour(population)
         randMut = random.randint(0,100) / 100
-        evolved = Evolution2(selected)
+        evolved = EvolutionCross(selected)
         population = generatePopulation(evolved)
         
         if mutProb == randMut:
@@ -251,10 +228,10 @@ def ExecGenetic(n):
         if (bestFit == 0):
             break
         
-    print("Intentos:",life)
+    #print("Intentos:",life)
     fSol = min(list(population.keys()))
-    solution = population[fSol][0]
-    print(solution)
-    print("Fitness:",fSol)
-    return fSol
+    #solution = population[fSol][0]
+    #print(solution)
+    #print("Fitness:",fSol)
+    return (fSol,life)
 #ExecGenetic(8)

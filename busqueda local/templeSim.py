@@ -6,7 +6,6 @@ def CopyList(lista):
         nList.append(i)
     return nList
     
-    return list
 def PrintBoard(heurBoard,board):
     lenx = len(heurBoard)
     leny = len(heurBoard)
@@ -86,11 +85,11 @@ def ExecTempleSim(n):
                 board[y] = x
         
         life += 1
-    print()
-    print("#-----------#")
-    # PrintBoard(heurTable,board)        
-    print(board)
-    print("Intentos:",life)
-    print("H final:",h)
-    return h
-ExecTempleSim(8)
+    # print()
+    # print("#-----------#")
+    # # PrintBoard(heurTable,board)        
+    # print(board)
+    # print("Intentos:",life)
+    # print("H final:",h)
+    return (h,life)
+#ExecTempleSim(8)
