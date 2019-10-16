@@ -60,7 +60,6 @@ def ExecHillClimb(n):
     life = 0
     while life < 1000:
         solutions = PriorityQueue()
-
         for y in range(0,len(board)):
             tempBoard = board.copy()
             for x in range(0,len(board)):
@@ -70,7 +69,7 @@ def ExecHillClimb(n):
                 if(tempH < h):
                     h = tempH
                     solutions.Enqueue([x,y],tempH)
-            
+
         #selecciono solucion al azar
         if solutions.Length() > 0:
             newSol = solutions.Dequeue()
@@ -85,4 +84,4 @@ def ExecHillClimb(n):
     # print("Intentos:",life)
     # print("H final:",h)
     return (h,life)
-# ExecHillClimb(8)
+ExecHillClimb(8)
