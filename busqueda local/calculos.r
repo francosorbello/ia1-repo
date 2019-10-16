@@ -6,17 +6,18 @@ data<-read.csv("datos.csv")
 ej2 <- data %>% 
     filter(h == 0) %>% 
     group_by(algoritmo,tablero) %>% 
-    summarise(tot=n()/30,med_time=mean(tiempo),desv_time=sd(tiempo))
+    summarise(tot=n(),med_time=mean(tiempo),desv_time=sd(tiempo))
 ej2
 print('#--------------------#')
 #EJ A)3) 
 ej3 <- data %>% 
     filter(h > 0) %>% 
     group_by(algoritmo,tablero) %>% 
-    summarise(med_time=mean(tiempo),desv_time=sd(tiempo))
+    summarise(med_h=mean(h),desv_h=sd(h))
 ej3
 #EJ A)4)
 #dev.set(which = dev.next())
+
 pdf("boxplots.pdf")
 #genero datos
 timeTS <- data %>% filter(algoritmo=="ExecTempleSim") %>% select(tiempo)
