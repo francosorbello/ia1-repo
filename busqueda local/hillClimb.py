@@ -27,7 +27,6 @@ def PrintBoard(heurBoard,board):
 
             print(valor,end=fin)
         print("")
-    # aux = input("enter para seguir")
     print("-----------------------------")
 
 def CreateBoard(n):
@@ -54,8 +53,7 @@ def heuristic(board):
 
 def ExecHillClimb(n):
     board = CreateBoard(n)
-    #heurTable es una matriz con los valores de la heuristica
-
+    #h_list = [] 
     h = heuristic(board)
     life = 0
     while life < 1000:
@@ -69,19 +67,14 @@ def ExecHillClimb(n):
                 if(tempH < h):
                     h = tempH
                     solutions.Enqueue([x,y],tempH)
-
         #selecciono solucion al azar
+        #h_list.append(h)
         if solutions.Length() > 0:
             newSol = solutions.Dequeue()
             board[newSol[1]] = newSol[0]
         if h==0:
             break
-        # PrintBoard(heurTable,board)        
         life += 1
-    # print()
-    # print("#-----------#")
-    # print(board)
-    # print("Intentos:",life)
-    # print("H final:",h)
+    
     return (h,life)
-ExecHillClimb(8)
+    #return h_list

@@ -207,7 +207,7 @@ def ExecGenetic(n):
             
         population[hSol].append(board.copy())
         aux += 1
-        
+    #h_list = []
     life = 0
     #sumFitness = getAllFitness(population)
     selected = []
@@ -223,15 +223,11 @@ def ExecGenetic(n):
         if mutProb == randMut:
             size = mutCant*populationSize/100
             Mutation(population,size)
-        #print(population.keys())
-        bestFit = min(list(population.keys()))
+        bestFit = min(population.keys())
+        #h_list.append(bestFit)
         if (bestFit == 0):
             break
         
-    #print("Intentos:",life)
-    fSol = min(list(population.keys()))
-    #solution = population[fSol][0]
-    #print(solution)
-    #print("Fitness:",fSol)
+    fSol = min(population.keys())
     return (fSol,life)
-#ExecGenetic(8)
+    # return h_list

@@ -18,7 +18,6 @@ def calcularDatos(arcsv,algoritmo,n):
     print("#--#")
     arcsv.writerow(["","","","","",""])
 
-startTotal = time.time()
 aux = 0
 with open('datos.csv', mode='w') as archivo:
     datos = csv.writer(archivo,delimiter=",")
@@ -31,10 +30,8 @@ with open('datos.csv', mode='w') as archivo:
     calcularDatos(datos,ExecHillClimb,(10))
     calcularDatos(datos,ExecTempleSim,(10))
 
-#print("#--#")
-    
-#print("Tiempo de ejecución total:",time.time()-startTotal)
-#print("Se obtuvo una una solución "+str(bestSol),"veces")
-#print("Llegó a la solución óptima con un ptje de: "+str(bestSol/30*100)+"%")
-#print("Tiempo:",time.time()-startTotal)
-#print("Optima:",bestSol/30*100)
+# with open('ejb.csv', mode='w') as archivo:
+#     datos = csv.writer(archivo,delimiter=",")
+#     datos.writerow(ExecHillClimb(8))
+#     datos.writerow(ExecTempleSim(8))
+#     datos.writerow(ExecGenetic(8))

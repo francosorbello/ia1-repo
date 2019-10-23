@@ -26,7 +26,6 @@ def PrintBoard(heurBoard,board):
 
             print(valor,end=fin)
         print("")
-    # aux = input("enter para seguir")
     print("-----------------------------")
 
 def CreateBoard(n):
@@ -54,7 +53,7 @@ def heuristic(board):
 
 def ExecTempleSim(n):
     board = CreateBoard(n)
-
+    #h_list = []
     h = heuristic(board)
     life = 0
 
@@ -83,13 +82,8 @@ def ExecTempleSim(n):
                 h = tempH
                 solution = [x,y]
                 board[y] = x
-        
+        #h_list.append(h)
         life += 1
-    # print()
-    # print("#-----------#")
-    # # PrintBoard(heurTable,board)        
-    # print(board)
-    # print("Intentos:",life)
-    # print("H final:",h)
+    
     return (h,life)
-#ExecTempleSim(8)
+    # return h_list
