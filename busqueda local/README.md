@@ -13,6 +13,8 @@ Una solución se considera buena cuando *H = 0*.
 
 #### Tiempo de ejecución
 
+*Nota: El hill climbing de 10 reinas no aparece porque no encontró ninguna solución.*
+
 |Algoritmo      |Tablero|Soluciones encontradas|Tiempo promedio|Desviación estándar|
 |---------------|-------|-------------------|---------------|----------------------|
 |Hill climbing  |8      |1                  |0.00648        |*NA*                  |
@@ -23,7 +25,7 @@ Una solución se considera buena cuando *H = 0*.
 
 #### Estados previos
 
-*Nota: El hill climbing de 10 reinas no aparece porque no encontró ninguna solución*
+*Nota: El hill climbing de 10 reinas no aparece porque no encontró ninguna solución.*
 
 |Algoritmo|Tablero|Media de pasos|Desviación estándar|
 |---------|-------|--------------|-------------------|

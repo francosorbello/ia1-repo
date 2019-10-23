@@ -31,7 +31,7 @@ ej3
 #EJ A)4)
 #dev.set(which = dev.next())
 
-pdf("boxplots.pdf")
+pdf("ejA4-boxplot-tiempos.pdf")
 #genero datos
 timeTS <- data %>% filter(algoritmo=="ExecTempleSim") %>% select(tiempo)
 timeGEN <- data %>% filter(algoritmo=="ExecGenetic") %>% select(tiempo)
@@ -47,7 +47,7 @@ dev.off()
 #EJ B)
 data2 <- read.csv("ejb.csv", header = FALSE)
 
-pdf("hPlots.pdf")
+pdf("ejB-graficos-h.pdf")
 yHC <- data2[1,]
 yHC <- as.numeric(unlist(yHC))
 yHC <- yHC[!is.na(yHC)]
