@@ -1,0 +1,124 @@
+---
+title: "Arboles"
+output: html_notebook
+---
+
+El primer paso es importar las librerías a utilizar.
+
+```{r}
+library(dplyr)
+library(readr)
+library(doMC)
+library(purrr)
+library(caret)
+# Use 3 cores, changet it accordingly. 
+registerDoMC(cores=3)
+```
+
+Luego, cargo los datos en unos data frames.
+
+```{r}
+data_train <- readr::read_csv("./arbolado-mza-dataset.csv",
+                              col_types = cols(
+  id = col_integer(),
+  especie = col_character(),
+  ultima_modificacion = col_character(),
+  altura = col_character(),
+  circ_tronco_cm = col_double(),
+  diametro_tronco = col_character(),
+  long = col_double(),
+  lat = col_double(),
+  seccion = col_integer(),
+  nombre_seccion = col_character(),
+  area_seccion = col_double(),
+  inclinacion_peligrosa = col_integer()
+))
+
+data_test <-  readr::read_csv("./arbolado-mza-dataset-test.csv",col_types = cols(
+  id = col_integer(),
+  especie = col_character(),
+  ultima_modificacion = col_character(),
+  altura = col_character(),
+  circ_tronco_cm = col_double(),
+  diametro_tronco = col_character(),
+  long = col_double(),
+  lat = col_double(),
+  seccion = col_integer(),
+  nombre_seccion = col_character(),
+  area_seccion = col_double()
+))
+
+
+#data_zero <- data_train %>% filter(inclinacion_peligrosa==0) %>% sample_frac(0.6)
+```
+Para mejorar el funcionamiento del algoritmo, se eliminan algunos de los ejemplos de arboles no peligrosos. Esto es para balancear los datos de prueba.
+```{r}
+data_zero <- data_train %>% filter(inclinacion_peligrosa==0) %>% sample_n(12000)
+data_wierd <- data_train %>% filter(especie=="rbol del cielo") #añadir arbol del cielo
+data_one <- data_train %>% filter(inclinacion_peligrosa==1)
+data_train <- rbind(data_zero,data_one)
+data_train <- rbind(data_train,data_wierd)
+
+```
+
+Como algunos algoritmos no permiten "1" o "0" como nombres de factores, se transforman los valores de "inclinacion peligrosa" a "si" y "no".
+```{r}
+data_train<-data_train %>% mutate(inclinacion_peligrosa=ifelse(inclinacion_peligrosa=='1','si','no'))
+data_train$inclinacion_peligrosa <-as.factor(data_train$inclinacion_peligrosa)
+``` 
+
+Se selecciona el metodo de sampleo a utilizar. En este caso, se usa *cross validation*.
+```{r}
+
+ctrl_fast <- trainControl(method="cv", 
+                       number=5, 
+                       verboseIter=T,
+                     classProbs=F,
+                     allowParallel = TRUE
+                  
+                     )  
+```
+
+Se entrena el modelo utilizando el algoritmo de *vecinos cercanos*. Se evitaron las siguientes variables:
+
+* Id
+* ultima modificacion
+* Nombre de sección
+* Area de seccion
+
+Estas variables fueron eliminadas porque consideré que no eran importantes a la hora de encontrar relaciones entre arboles y su probabilidad de caerse.
+```{r}
+train_formula<-formula(inclinacion_peligrosa~altura+especie+diametro_tronco+long+lat+seccion)
+#ctrl_fast$sampling<-"up"
+
+trained_data<- train(train_formula,
+               data = data_train,
+               tuneLength=10,
+               method = "kknn",
+               #preProcess=c("scale","center"),
+               trControl = ctrl_fast)
+trained_data
+
+```
+
+Una vez obtenidas las soluciones retorno la inclinación peligrosa a "1" y "0".
+
+```{r}
+data_train<-data_train %>% mutate(inclinacion_peligrosa=ifelse(inclinacion_peligrosa=='1','si','no'))
+data_train$inclinacion_peligrosa <-as.factor(data_train$inclinacion_peligrosa)
+```
+
+Con la funcion *predict()* se le asigna una probabiliad a cada clase obtenida.
+
+```{r}
+preds_tree_probs=predict(trained_data,data_test,type='prob')
+preds_tree=ifelse(preds_tree_probs[,2] >=0.5,1,0)
+```
+
+Finalmente, se genera un csv con los datos evaluados.
+
+```{r}
+setwd("/home/rulo/Documentos/UNCU-LINUX/ia/repos/intro-mldl-r/lab2/data")
+submission<-data.frame(id=data_test$id,inclinacion_peligrosa=preds_tree)
+readr::write_csv(submission,"./arbolado-mza-dataset-envio-ejemplo-rpart.csv")
+```
